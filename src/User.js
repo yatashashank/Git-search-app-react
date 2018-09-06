@@ -4,26 +4,46 @@ class User extends Component {
 
     render() {
 
-        return (
-            <div>
-                <div className="panel panel-default">
-                    <div className="panel-heading">
-                        <h3 className="panel-title">{this.props.user.name}</h3>
-                        <span className="label label-info">ID: {this.props.user.serial}</span><br></br>
-                        <span className="label label-info">Git Score: {this.props.user.score}</span><br></br>
-                    </div>
-                    <div className="panel-body">
-                        <div className="row">
-                            <div className="col-md-3">
-                                <img style={{ width: "100%" }} className="thunmbnail" src={this.props.user.avatar} />
-                                <a target="_blank" className="btn btn-primary btn-block" href={this.props.user.view}>View Profile</a>
-                            </div>
-                            <div className="col-md-9">
+        let info = this.props.user.map((prof, index) => {
+            return (
 
-                                <br></br>
-                            </div>
-                        </div>
-                    </div>
+                <div key={index} className="col-md-3">
+
+                    {
+                        prof.login && <h3 className="panel-title">{prof.login}</h3>
+                    }
+                    {
+                        prof.id && <span className="label label-info">ID: {prof.id}</span>
+                    }
+                    <br></br>
+                    {
+                        prof.score && <span className="label label-info">
+                            Git Score: {prof.score}</span>
+                    }
+                    <br></br>
+
+
+
+
+                    <img style={{ width: "100%" }} className="thunmbnail"
+                        src={prof.avatar_url} />
+                    {
+                        prof.html_url && <a target="_blank"
+                            className="btn btn-primary btn-block" href={prof.html_url}>
+                            View Profile</a>
+                    }
+
+
+
+
+                </div>
+            )
+        })
+
+        return (
+            <div id='profile'>
+                <div className="panel panel-default row">
+                    {info}
                 </div>
             </div>
 

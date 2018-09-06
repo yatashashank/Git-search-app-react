@@ -1,29 +1,25 @@
 import React, { Component } from 'react';
 import User from './User';
+import Title from './components/Title'
+import Form from './components/Form'
+import { DebounceInput } from 'react-debounce-input';
 import './App.css';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-  }
+
   state = {
-    user: {}
+    user: []
   }
-  getUser = () => {
-    const name = this.refs.name.value;
+  getUser = (e) => {
+    e.preventDefault();
+    let name = e.target.elements.searchUser.value;
+    e.target.reset();
     if (name.length !== 0) {
-      fetch(`https://api.github.com/search/users?q=${name}`)
+      fetch(`https://api.github.com/search/users?q=${name}&client_id=7affacd2673d47bfdee8&client_secret=5e402d4e3c51b0edaa164b9581f92d7bfe064981`)
         .then(response => response.json())
         .then(data => {
           this.setState({
-            user: {
-              name: data.items[0].login,
-              avatar: data.items[0].avatar_url,
-              view: data.items[0].html_url,
-              serial: data.items[0].id,
-              score: data.items[0].score
-            }
-
+            user: data.items
           }
           )
         })
@@ -32,24 +28,13 @@ class App extends Component {
   }
   render() {
 
-
+    console.log(this.state.user);
     return (
       <div className="App">
-        <nav className="navbar navbar-expand-md navbar-dark bg-dark ">
-          <a className="navbar-brand" href="#">Github search</a>
-        </nav>
-
-        <main role="main" className="container">
-
-          <div className="searchContainer">
-            <h1>Search User</h1>
-            <p className="lead">Enter user name</p>
-            <input type="text" id="searchUser" className="form-control" placeholder="Search......" ref="name" onKeyUp={this.getUser} />
-          </div>
-          <br></br>
-          <div id="profile">
-            <User user={this.state.user} />
-          </div>
+        <Title />
+        <main role="main" className="container" style={{ backgroundColor: '#615959' }}>
+          <Form getUser={this.getUser} />
+          <User user={this.state.user} />
         </main>
 
       </div>
@@ -57,5 +42,4 @@ class App extends Component {
     );
   }
 }
-
 export default App;
